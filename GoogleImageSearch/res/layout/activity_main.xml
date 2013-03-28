@@ -16,35 +16,41 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
         android:orientation="vertical"
-        android:background="@drawable/border" >
+         >
 
         <EditText
             android:id="@+id/_SEARCH_QUERY"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:hint="@string/Search" >
 
             <requestFocus />
         </EditText>
 
         <ProgressBar
-            android:id="@+id/progressBar1"
+            android:id="@+id/_SEARCH_PROGRESS_BAR"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/SearchButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Search" />
 
     </LinearLayout>
 
     <SlidingDrawer
         android:id="@+id/_FAV_RESULT_DRAWER"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="14dp"
         android:content="@+id/_FAV_RESULT_HOLDER"
-        android:handle="@+id/handle"
-         >
+        android:handle="@+id/handle" >
 
         <Button
             android:id="@+id/handle"
@@ -89,6 +95,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/testImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/border" />
+
         </LinearLayout>
     </ScrollView>
 
