@@ -21,15 +21,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -51,10 +55,67 @@ public class MainActivity extends Activity {
 	LinearLayout _images_holder;
 	ImageView testImage1,testImage2,testImage3;
 	ProgressBar _search_progress_bar;
-	String _NUM_OF_IMAGES = "5";
+	int _NUM_OF_IMAGES = 5;
 	String _IMAGE_SIZE = "large";
 	ArrayList<String> _thumbNails = new ArrayList<String>();
+	static ArrayList<Bitmap> _thumbNailImages = new ArrayList<Bitmap>();
 	static int imgCount = 1;
+	static int progressCount = 95/5; 
+	GridView imageGrid; 
+	
+	ImageAdapter imgAdapter = new ImageAdapter(this,_thumbNailImages);
+	
+	public class ImageAdapter extends BaseAdapter{
+
+		private Context mContext;
+		ArrayList<Bitmap> _thumbNailImages_TEMP;
+		
+		public ImageAdapter(Context c,ArrayList<Bitmap> TEMP){
+			this.mContext = c;
+			this._thumbNailImages_TEMP = TEMP;
+			Log.i("Google Image Search" ,"Entered ImageAdapter = "+_thumbNailImages_TEMP.size());
+			Log.i("Google Image Search" ,"Context = "+mContext);
+		}
+		
+		
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			
+			return _thumbNailImages_TEMP.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return _thumbNailImages_TEMP.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View arg1, ViewGroup arg2) {
+			// TODO Auto-generated method stub
+			ImageView imageView;
+			if(arg1==null){
+			imageView = new ImageView(mContext);
+	        imageView.setImageBitmap(_thumbNailImages_TEMP.get(position));
+	        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+	        imageView.setLayoutParams(new GridView.LayoutParams(85, 100));
+	        imageView.setPadding(5, 5, 5, 5);
+	        Log.i("Google Image Search" ,"Image View Creation = "+imageView.getHeight());
+			}
+			else{
+				imageView = (ImageView) arg1;
+			}
+			return imageView;
+		}
+		
+	}
 	
 	
 	//SUBCLASSING FOR HTTP ATASK SYNC
@@ -66,24 +127,42 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(Bitmap imagePic) {
 			
 			 // Log.i("Google Image Search" ,"Thumbnail onPostExecute Link = "+ThumbnailLink);
-				if(imgCount==1)
-				{
-					testImage1 = (ImageView)findViewById(R.id.testImage1);
-					testImage1.setImageBitmap(imagePic);
-				}
-				if(imgCount==2){
-					testImage2 = (ImageView)findViewById(R.id.testImage2);
-					testImage2.setImageBitmap(imagePic);
-				}
-				if(imgCount==3){
-					testImage3 = (ImageView)findViewById(R.id.testImage3);
-					testImage3.setImageBitmap(imagePic);
-					imgCount=0;
-				}
 				
-				imgCount++;
-			  
+				
+				
+				_thumbNailImages.add(imagePic);
+				Log.i("Google Image Search" ,"ThumbnailImagesArraySize = "+_thumbNailImages.size());
+				
+				publishProgress(progressCount);
+				progressCount = progressCount + progressCount;
+				
+				if(_thumbNailImages.size()==5){
+					
+					/*imageGrid = (GridView)findViewById(R.id._IMAGE_GRIDVIEW);
+					imageGrid.setAdapter(imgAdapter);*/
+					
+					//Log.i("Google Image Search" ,"ImageAdapter = "+temp);
+					Log.i("Google Image Search" ,"ImageAdapter child count = "+imgAdapter.getCount());
+					Log.i("Google Image Search" ,"ImageGrid child count = "+imageGrid.getChildCount());
+					
+					/*testImage1 = (ImageView)findViewById(R.id.testImage1);
+					testImage2 = (ImageView)findViewById(R.id.testImage2);
+					testImage3 = (ImageView)findViewById(R.id.testImage3);
+					testImage1.setImageBitmap(_thumbNailImages.get(0));
+					testImage2.setImageBitmap(_thumbNailImages.get(1));
+					testImage3.setImageBitmap(_thumbNailImages.get(2));*/
+					
+					_thumbNailImages.removeAll(_thumbNailImages);
+					Log.i("Google Image Search" ,"ThumbnailImagesArraySizeAfterLimit = "+_thumbNailImages.size());
+				}
 	    }
+		
+		
+		 protected void onProgressUpdate(Integer... progress) {
+			  	
+			  _search_progress_bar.setProgress(progress[0]);
+		        
+		  }
 		
 		@Override
 		protected Bitmap doInBackground(String... imageUrl) {
@@ -131,7 +210,8 @@ public class MainActivity extends Activity {
 			  for(int i = 0; i<ThumbnailLinks.size();i++){
 				  new getImage().execute(ThumbnailLinks.get(i).toString());  
 			  }
-			  
+			  //CLEARING THUMBNAIL LINKS HOLDER ARRAY...
+			  ThumbnailLinks.removeAll(ThumbnailLinks);
 			  
 	    }
 
@@ -150,19 +230,19 @@ public class MainActivity extends Activity {
 			Log.i("Google Image Search", "URL String = "+URL[0]);
 			
 			 HttpClient httpClient = new DefaultHttpClient();
-			    publishProgress(10);
+			    //publishProgress(10);
 		        try {
 		        	
 		        	HttpGet httpGet = new HttpGet(URL[0]);
 				     HttpResponse httpResponseGet = httpClient.execute(httpGet);
 				     HttpEntity resEntityGet = httpResponseGet.getEntity(); 
-				     publishProgress(20);
+				     //publishProgress(20);
 				           if (resEntityGet != null) 
 				           {
 				            String responseString = EntityUtils.toString(resEntityGet);             
 				                         
 				            Log.i("Google Image Search" ,"Response = "+responseString);
-				            publishProgress(50);
+				           // publishProgress(50);
 				            jObject = new JSONObject(responseString);
 				            
 				            _IMAGE_RESULTS = jObject.getJSONArray("items");
@@ -181,10 +261,10 @@ public class MainActivity extends Activity {
 				            }
 				        
 				            
-				            publishProgress(60);
+				            //publishProgress(60);
 				            Log.i("Google Image Search" ,"Thumbnail Link = "+imageLink);
 				            
-				            publishProgress(80);
+				            //publishProgress(80);
 				            
 				           }
 				           
@@ -193,7 +273,7 @@ public class MainActivity extends Activity {
 					Log.i("Google Image Search Error", e.toString());
 					
 				}
-		        publishProgress(100);
+		        publishProgress(5);
 			return _thumbNails;
 		}
 		
@@ -222,6 +302,10 @@ public class MainActivity extends Activity {
 				URL = "https://www.googleapis.com/customsearch/v1?q="+_search_query+"&num="+_NUM_OF_IMAGES+"&cx="+_cx+"&fileType=png&searchType=image&imgSize="+_IMAGE_SIZE+"&key="+_APIKEY+"&alt=json";
 				
 				new httpRequest().execute(URL);
+				
+				imgAdapter.notifyDataSetChanged();
+				imageGrid = (GridView)findViewById(R.id._IMAGE_GRIDVIEW);
+				imageGrid.setAdapter(imgAdapter);
 				
 			}
 		});

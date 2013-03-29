@@ -81,6 +81,18 @@
         </LinearLayout>
     </SlidingDrawer>
 
+     <GridView
+         android:id="@+id/_IMAGE_GRIDVIEW"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/_SEARCH_BAR_HOLDER"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="10dp"
+         android:numColumns="3" >
+        
+     </GridView>
+    
+    <!-- 
     <ScrollView
         android:id="@+id/_RESULT_IMAGE_HOLDER"
         android:layout_width="match_parent"
@@ -95,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
-
+		
             <ImageView
                 android:id="@+id/testImage1"
                 android:layout_width="85dp"
@@ -114,8 +126,16 @@
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/border" />
+		 
+
+            <GridView
+                android:id="@+id/_IMAGE_GRIDVIEW"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="3" >
+            </GridView>
 
         </LinearLayout>
     </ScrollView>
-
+	-->
 </RelativeLayout>
