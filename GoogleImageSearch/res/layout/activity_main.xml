@@ -15,8 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
-        android:orientation="vertical"
-         >
+        android:orientation="vertical" >
 
         <EditText
             android:id="@+id/_SEARCH_QUERY"
@@ -39,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="Search" />
-
     </LinearLayout>
 
     <SlidingDrawer
@@ -48,7 +46,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="0dp"
         android:content="@+id/_FAV_RESULT_HOLDER"
         android:handle="@+id/handle" >
 
@@ -74,25 +72,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
-
                 </LinearLayout>
             </ScrollView>
-
         </LinearLayout>
     </SlidingDrawer>
 
-     <GridView
-         android:id="@+id/_IMAGE_GRIDVIEW"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/_SEARCH_BAR_HOLDER"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="10dp"
-         android:numColumns="3" >
-        
-     </GridView>
-    
-    <!-- 
+    <GridView
+        android:id="@+id/_IMAGE_GRIDVIEW"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/_SEARCH_BAR_HOLDER"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="60dp"
+        android:columnWidth="85dp"
+        android:gravity="center"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp" >
+    </GridView>
+
+    <!--
     <ScrollView
         android:id="@+id/_RESULT_IMAGE_HOLDER"
         android:layout_width="match_parent"
@@ -137,5 +137,6 @@
 
         </LinearLayout>
     </ScrollView>
-	-->
+    -->
+
 </RelativeLayout>
