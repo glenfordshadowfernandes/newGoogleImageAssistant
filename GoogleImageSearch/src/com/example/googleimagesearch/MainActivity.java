@@ -1,3 +1,9 @@
+/*
+ * Author: Glenford Fernandes
+ * Github Rep: https://github.com/glenfordshadowfernandes/newGoogleImageAssistant.git
+ * 
+ */
+
 package com.example.googleimagesearch;
 
 import java.io.ByteArrayOutputStream;
@@ -22,6 +28,7 @@ import org.json.JSONObject;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore.Images;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
@@ -84,81 +91,7 @@ public class MainActivity extends Activity {
 	GridView imageGrid;
 	ImageAdapter imgAdapter;
 
-	/*
-	 * private static final String LOG_TAG = "Autocomplete:"; private static
-	 * final String PLACES_API_BASE =
-	 * "https://maps.googleapis.com/maps/api/place"; private static final String
-	 * TYPE_AUTOCOMPLETE = "/autocomplete"; private static final String OUT_JSON
-	 * = "/json";
-	 */
-
-	/*
-	 * public class PlacesAutoCompleteAdapter extends ArrayAdapter<String>
-	 * implements Filterable { private ArrayList<String> resultList;
-	 * 
-	 * 
-	 * public PlacesAutoCompleteAdapter(Context context, int textViewResourceId)
-	 * { super(context, textViewResourceId); }
-	 * 
-	 * @Override public int getCount() { return resultList.size(); }
-	 * 
-	 * @Override public String getItem(int index) { return
-	 * resultList.get(index); }
-	 * 
-	 * @Override public Filter getFilter() { Filter filter = new Filter() {
-	 * 
-	 * @Override protected FilterResults performFiltering(CharSequence
-	 * constraint) { FilterResults filterResults = new FilterResults(); if
-	 * (constraint != null) { // Retrieve the autocomplete results. resultList =
-	 * autocomplete(constraint.toString());
-	 * 
-	 * // Assign the data to the FilterResults filterResults.values =
-	 * resultList; filterResults.count = resultList.size(); } return
-	 * filterResults; }
-	 * 
-	 * @Override protected void publishResults(CharSequence constraint,
-	 * FilterResults results) { if (results != null && results.count > 0) {
-	 * notifyDataSetChanged(); } else { notifyDataSetInvalidated(); } }}; return
-	 * filter; } }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * private ArrayList<String> autocomplete(String input) { ArrayList<String>
-	 * resultList = null;
-	 * 
-	 * HttpURLConnection conn = null; StringBuilder jsonResults = new
-	 * StringBuilder(); try { StringBuilder sb = new
-	 * StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
-	 * sb.append("?sensor=false&key=" + _APIKEY);
-	 * sb.append("&components=country:uk"); sb.append("&input=" +
-	 * URLEncoder.encode(input, "utf8"));
-	 * 
-	 * java.net.URL url = new java.net.URL(sb.toString()); conn =
-	 * (HttpURLConnection) url.openConnection(); InputStreamReader in = new
-	 * InputStreamReader(conn.getInputStream());
-	 * 
-	 * // Load the results into a StringBuilder int read; char[] buff = new
-	 * char[1024]; while ((read = in.read(buff)) != -1) {
-	 * jsonResults.append(buff, 0, read); } } catch (MalformedURLException e) {
-	 * Log.e(LOG_TAG, "Error processing Places API URL", e); return resultList;
-	 * } catch (IOException e) { Log.e(LOG_TAG,
-	 * "Error connecting to Places API", e); return resultList; } finally { if
-	 * (conn != null) { conn.disconnect(); } }
-	 * 
-	 * try { // Create a JSON object hierarchy from the results JSONObject
-	 * jsonObj = new JSONObject(jsonResults.toString()); JSONArray
-	 * predsJsonArray = jsonObj.getJSONArray("predictions");
-	 * 
-	 * // Extract the Place descriptions from the results resultList = new
-	 * ArrayList<String>(predsJsonArray.length()); for (int i = 0; i <
-	 * predsJsonArray.length(); i++) {
-	 * resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
-	 * } } catch (JSONException e) { Log.e(LOG_TAG,
-	 * "Cannot process JSON results", e); }
-	 * 
-	 * return resultList; }
-	 */
+	
 
 	// IMAGE ADAPTER CLASS
 	public class ImageAdapter extends BaseAdapter implements OnLongClickListener {
@@ -218,12 +151,13 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			
 			Bitmap shareImage = v.getDrawingCache();
-			/*ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			shareImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			byte[] byteArray = stream.toByteArray();*/
+			String path = Images.Media.insertImage(getContentResolver(), shareImage ,"Image", "temp store");
+			//Uri imageURI = Uri.parse(path);
+			Log.i("Google Image Search",
+					"Image path = " + path);
 			Intent sharingIntent = new Intent(Intent.ACTION_SEND);
 			sharingIntent.setType("image/png");
-			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareImage);
+			sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM,shareImage);
 			startActivity(Intent.createChooser(sharingIntent,"Share Image using"));
 			
 			return false;
