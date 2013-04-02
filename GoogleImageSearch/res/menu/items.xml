@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/markFav"
+        android:title="@string/Favourite"
+        android:icon="@android:drawable/star_off"
+        android:showAsAction="ifRoom|withText" />
+    
+</menu>

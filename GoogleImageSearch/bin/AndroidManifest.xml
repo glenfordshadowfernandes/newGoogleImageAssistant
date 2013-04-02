@@ -27,6 +27,9 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.googleimagesearch.ImageFullscreenActivity"></activity>
+        <activity
+            android:name="com.example.googleimagesearch.ImageFullscreenActivity"
+            android:uiOptions="none" >
+        </activity>
     </application>
 </manifest>

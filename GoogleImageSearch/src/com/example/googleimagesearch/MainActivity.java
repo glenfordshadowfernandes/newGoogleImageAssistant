@@ -137,6 +137,7 @@ public class MainActivity extends Activity {
 			arg1 = _lInflate.inflate(R.layout.image_view, null);
 			imageView = (ImageView) arg1.findViewById(R.id.imageView1);
 			imageView.setImageBitmap(_thumbNailImages_TEMP.get(position));
+			imageView.setId(position);
 			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			imageView.setPadding(5, 5, 5, 5);
 			// imageView.setOnTouchListener(new MyTouchListener());
@@ -169,11 +170,17 @@ public class MainActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			v.buildDrawingCache(true);
-			Bitmap image = Bitmap.createBitmap(v.getDrawingCache());
-			Log.i("Google Image Search", "Sent Image Attrs = "+image.toString());
+			//Bitmap image = _thumbNailImages.get(v.getId());
+			
+			v.buildDrawingCache();
+			Bitmap image = v.getDrawingCache();
+			Log.i("Google Image Search", "Sent Image ID = "+v.getId());
+			Log.i("Google Image Search", "Sent Image height = "+image.getHeight());
+			Log.i("Google Image Search", "Sent Image width = "+image.getWidth());
 			Intent fullscreenIntent = new Intent(MainActivity.this, ImageFullscreenActivity.class);
 			fullscreenIntent.putExtra("imageparsed", image);
+			fullscreenIntent.putExtra("ImageID", v.getId());
+			fullscreenIntent.putParcelableArrayListExtra("bitmapArray", _thumbNailImages);
 			startActivity(fullscreenIntent);
 			
 		}
