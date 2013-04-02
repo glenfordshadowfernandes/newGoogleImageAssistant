@@ -36,6 +36,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.text.method.KeyListener;
 import android.util.Log;
@@ -91,10 +92,9 @@ public class MainActivity extends Activity {
 	GridView imageGrid;
 	ImageAdapter imgAdapter;
 
-	
-
 	// IMAGE ADAPTER CLASS
-	public class ImageAdapter extends BaseAdapter implements OnLongClickListener {
+	public class ImageAdapter extends BaseAdapter implements
+			OnLongClickListener, OnClickListener {
 
 		private Context mContext;
 		ArrayList<Bitmap> _thumbNailImages_TEMP;
@@ -139,8 +139,9 @@ public class MainActivity extends Activity {
 			imageView.setImageBitmap(_thumbNailImages_TEMP.get(position));
 			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			imageView.setPadding(5, 5, 5, 5);
-			//imageView.setOnTouchListener(new MyTouchListener());
+			// imageView.setOnTouchListener(new MyTouchListener());
 			imageView.setOnLongClickListener(this);
+			imageView.setOnClickListener(this);
 			Log.i("Google Image Search",
 					"Image View Creation = " + imageView.getHeight());
 			return arg1;
@@ -149,18 +150,32 @@ public class MainActivity extends Activity {
 		@Override
 		public boolean onLongClick(View v) {
 			// TODO Auto-generated method stub
-			
+
 			Bitmap shareImage = v.getDrawingCache();
-			String path = Images.Media.insertImage(getContentResolver(), shareImage ,"Image", "temp store");
-			//Uri imageURI = Uri.parse(path);
-			Log.i("Google Image Search",
-					"Image path = " + path);
+			String path = Images.Media.insertImage(getContentResolver(),
+					shareImage, "Image", "temp store");
+			// Uri imageURI = Uri.parse(path);
+			Log.i("Google Image Search", "Image path = " + path);
 			Intent sharingIntent = new Intent(Intent.ACTION_SEND);
 			sharingIntent.setType("image/png");
-			sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM,shareImage);
-			startActivity(Intent.createChooser(sharingIntent,"Share Image using"));
-			
+			sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM,
+					shareImage);
+			startActivity(Intent.createChooser(sharingIntent,
+					"Share Image using"));
+
 			return false;
+		}
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			v.buildDrawingCache(true);
+			Bitmap image = Bitmap.createBitmap(v.getDrawingCache());
+			Log.i("Google Image Search", "Sent Image Attrs = "+image.toString());
+			Intent fullscreenIntent = new Intent(MainActivity.this, ImageFullscreenActivity.class);
+			fullscreenIntent.putExtra("imageparsed", image);
+			startActivity(fullscreenIntent);
+			
 		}
 
 	}
@@ -290,7 +305,6 @@ public class MainActivity extends Activity {
 					Log.i("Google Image Search", "Response = " + responseString);
 					// publishProgress(50);
 					jObject = new JSONObject(responseString);
-
 					_IMAGE_RESULTS = jObject.getJSONArray("items");
 					Log.i("Google Image Search", "_results_returned = "
 							+ _IMAGE_RESULTS.length());
@@ -343,40 +357,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		_search_query_box = (EditText) findViewById(R.id._SEARCH_QUERY);
-		// _search_query_auto =
-		// (AutoCompleteTextView)findViewById(R.id.autoCompleteTextView1);
 		_search_button = (Button) findViewById(R.id.SearchButton);
 		_search_progress_bar = (ProgressBar) findViewById(R.id._SEARCH_PROGRESS_BAR);
-
-		/*
-		 * _search_query_auto.setKeyListener(new KeyListener() {
-		 * 
-		 * @Override public boolean onKeyUp(View arg0, Editable arg1, int arg2,
-		 * KeyEvent arg3) { // TODO Auto-generated method stub
-		 * 
-		 * Log.i(LOG_TAG, "Entered on key up function"); Log.i(LOG_TAG,
-		 * "Entered on key ="+_search_query_auto.getText().toString());
-		 * autocomplete(_search_query_auto.getText().toString()); return true; }
-		 * 
-		 * @Override public boolean onKeyOther(View arg0, Editable arg1,
-		 * KeyEvent arg2) { // TODO Auto-generated method stub return false; }
-		 * 
-		 * @Override public boolean onKeyDown(View arg0, Editable arg1, int
-		 * arg2, KeyEvent arg3) { // TODO Auto-generated method stub return
-		 * false; }
-		 * 
-		 * @Override public int getInputType() { // TODO Auto-generated method
-		 * stub return 0; }
-		 * 
-		 * @Override public void clearMetaKeyState(View arg0, Editable arg1, int
-		 * arg2) { // TODO Auto-generated method stub
-		 * 
-		 * } });
-		 * 
-		 * _search_query_auto.setAdapter(new PlacesAutoCompleteAdapter(this,
-		 * R.layout.autolist));
-		 */
-
 		_search_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -409,7 +391,5 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
-	
 
 }
