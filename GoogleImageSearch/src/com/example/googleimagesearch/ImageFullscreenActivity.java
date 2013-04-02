@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +37,8 @@ public class ImageFullscreenActivity extends Activity {
 	Boolean Favflag = false;
 	Bitmap bmp;
 	ArrayList<Bitmap> _thumbnailImages;
+	Bitmap fetchedImage;
+	File myDir;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,14 +51,20 @@ public class ImageFullscreenActivity extends Activity {
 
 		ImageView imageToDisplay = (ImageView) findViewById(R.id.fullscreenView);
 		Intent imgIntent = getIntent();
-		Bitmap fetchedImage = (Bitmap) imgIntent
-				.getParcelableExtra("imageparsed");
+		fetchedImage = (Bitmap) imgIntent.getParcelableExtra("imageparsed");
 		imageID = imgIntent.getIntExtra("ImageID", 0);
-		_thumbnailImages = getIntent().getParcelableArrayListExtra("bitmapArray");
+		// _thumbnailImages =
+		// getIntent().getParcelableArrayListExtra("bitmapArray");
 		Log.i(_LOGTAG, "Recieved Image ID = " + imageID);
 		Log.i(_LOGTAG, "Recieved Image height = " + fetchedImage.getHeight());
 		Log.i(_LOGTAG, "Recieved Image width = " + fetchedImage.getWidth());
 		imageToDisplay.setImageBitmap(fetchedImage);
+		myDir = new File("/sdcard/GoogleImageSearch");
+		if(!myDir.exists())
+		{
+			myDir.mkdirs();
+		}
+		
 
 	}
 
@@ -73,29 +82,32 @@ public class ImageFullscreenActivity extends Activity {
 
 		switch (item.getItemId()) {
 		case R.id.markFav:
-			Toast.makeText(getBaseContext(), "You selected Fav",
-					Toast.LENGTH_SHORT).show();
+
 			if (!Favflag) {
 
 				item.setIcon(android.R.drawable.star_on);
 				this.Favflag = true;
 				
-				bmp = _thumbnailImages.get(imageID);
-				
+				// bmp = _thumbnailImages.get(imageID);
+				Random generator = new Random();
+				int n = 10000;
+				n = generator.nextInt(n);
+				bmp = fetchedImage;
+
 				try {
-					// write the bytes in file
+
 					FileOutputStream fo;
 					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 					bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-
-					// you can create a new file name "test.jpg" in sdcard
-					// folder.
 					File f = new File(Environment.getExternalStorageDirectory()
-							+ File.separator + "test.jpg");
+							+ File.separator + "test" + imageID + ".jpg");
 					f.createNewFile();
+					Log.i(_LOGTAG, "File saved location = " + f);
 					fo = new FileOutputStream(f);
 					fo.write(bytes.toByteArray());
-					// remember close the FileOutput
+					Toast.makeText(getBaseContext(),
+							"Image Saved as Favourite", Toast.LENGTH_LONG)
+							.show();
 					fo.close();
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

@@ -180,7 +180,7 @@ public class MainActivity extends Activity {
 			Intent fullscreenIntent = new Intent(MainActivity.this, ImageFullscreenActivity.class);
 			fullscreenIntent.putExtra("imageparsed", image);
 			fullscreenIntent.putExtra("ImageID", v.getId());
-			fullscreenIntent.putParcelableArrayListExtra("bitmapArray", _thumbNailImages);
+			//fullscreenIntent.putParcelableArrayListExtra("bitmapArray", _thumbNailImages);
 			startActivity(fullscreenIntent);
 			
 		}
