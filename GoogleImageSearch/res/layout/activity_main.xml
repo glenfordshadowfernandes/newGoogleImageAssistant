@@ -7,7 +7,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-
     <LinearLayout
         android:id="@+id/_SEARCH_BAR_HOLDER"
         android:layout_width="match_parent"
@@ -16,17 +15,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
         android:orientation="vertical" >
-		
         <EditText
             android:id="@+id/_SEARCH_QUERY"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:hint="@string/Search" >
-
             <requestFocus />
         </EditText>
-	
-<!-- 
+        <!--
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView1"
             android:layout_width="match_parent"
@@ -34,22 +30,19 @@
             android:ems="10"
             android:textColor="#FF00FF00"
             android:text="" />
-	 -->
+        -->
         <ProgressBar
             android:id="@+id/_SEARCH_PROGRESS_BAR"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
         <Button
             android:id="@+id/SearchButton"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="Search" />
-
     </LinearLayout>
-
     <SlidingDrawer
         android:id="@+id/_FAV_RESULT_DRAWER"
         android:layout_width="match_parent"
@@ -57,96 +50,40 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="0dp"
+        android:layout_marginRight="0dp"
         android:content="@+id/_FAV_RESULT_HOLDER"
-        android:handle="@+id/handle" >
-
+        android:handle="@+id/handle"
+        android:orientation="horizontal" >
         <Button
             android:id="@+id/handle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="5dp"
+            android:layout_height="fill_parent"
             android:text="@string/favourite_button" />
-
         <LinearLayout
             android:id="@+id/_FAV_RESULT_HOLDER"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/border" >
-
-            <ScrollView
-                android:id="@+id/_SCROLL_IMAGE_HOLDER"
+            <ListView
+                android:id="@+id/favListView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <LinearLayout
-                    android:id="@+id/_FAV_RESULTS_CONTAINER"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
-                </LinearLayout>
-            </ScrollView>
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+            </ListView>
         </LinearLayout>
     </SlidingDrawer>
-
     <GridView
         android:id="@+id/_IMAGE_GRIDVIEW"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/_SEARCH_BAR_HOLDER"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="60dp"
+        android:layout_marginTop="10dp"
         android:columnWidth="85dp"
         android:gravity="center"
         android:numColumns="3"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" >
     </GridView>
-
-    <!--
-    <ScrollView
-        android:id="@+id/_RESULT_IMAGE_HOLDER"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/_SEARCH_BAR_HOLDER"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-         >
-
-        <LinearLayout
-            android:id="@+id/_IMAGES_HOLDER"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-		
-            <ImageView
-                android:id="@+id/testImage1"
-                android:layout_width="85dp"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/border" />
-            <ImageView
-                android:id="@+id/testImage2"
-                android:layout_width="85dp"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/border" />
-            <ImageView
-                android:id="@+id/testImage3"
-                android:layout_width="85dp"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/border" />
-		 
-
-            <GridView
-                android:id="@+id/_IMAGE_GRIDVIEW"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:numColumns="3" >
-            </GridView>
-
-        </LinearLayout>
-    </ScrollView>
-    -->
-
 </RelativeLayout>

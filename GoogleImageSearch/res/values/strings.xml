@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="Search">Search Images</string>
-    <string name="favourite_button">Favourite Images</string>
+    <string name="favourite_button">FV</string>
     <string name="Favourite">Add to Fav</string>
 
 </resources>

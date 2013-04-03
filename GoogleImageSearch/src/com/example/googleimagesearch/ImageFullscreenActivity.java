@@ -32,13 +32,14 @@ import android.widget.Toast;
 
 public class ImageFullscreenActivity extends Activity {
 
-	String _LOGTAG = "GoogleImageSearch";
-	int imageID;
-	Boolean Favflag = false;
-	Bitmap bmp;
-	ArrayList<Bitmap> _thumbnailImages;
-	Bitmap fetchedImage;
-	File myDir;
+	String				_LOGTAG	= "GoogleImageSearch";
+	int					imageID;
+	Boolean				Favflag	= false;
+	Bitmap				bmp;
+	ArrayList<Bitmap>	_thumbnailImages;
+	Bitmap				fetchedImage;
+	File				myDir;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +49,8 @@ public class ImageFullscreenActivity extends Activity {
 		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		 */
 		setContentView(R.layout.image_fullscreen_view);
+		GlobalResource globalRes = (GlobalResource) getApplication();
+		_thumbnailImages = globalRes.getImages();
 
 		ImageView imageToDisplay = (ImageView) findViewById(R.id.fullscreenView);
 		Intent imgIntent = getIntent();
@@ -58,13 +61,13 @@ public class ImageFullscreenActivity extends Activity {
 		Log.i(_LOGTAG, "Recieved Image ID = " + imageID);
 		Log.i(_LOGTAG, "Recieved Image height = " + fetchedImage.getHeight());
 		Log.i(_LOGTAG, "Recieved Image width = " + fetchedImage.getWidth());
-		imageToDisplay.setImageBitmap(fetchedImage);
+		// imageToDisplay.setImageBitmap(fetchedImage);
+		imageToDisplay.setImageBitmap(_thumbnailImages.get(imageID));
+
 		myDir = new File("/sdcard/GoogleImageSearch");
-		if(!myDir.exists())
-		{
+		if (!myDir.exists()) {
 			myDir.mkdirs();
 		}
-		
 
 	}
 
@@ -81,51 +84,57 @@ public class ImageFullscreenActivity extends Activity {
 		super.onOptionsItemSelected(item);
 
 		switch (item.getItemId()) {
-		case R.id.markFav:
+			case R.id.markFav:
 
-			if (!Favflag) {
+				if (!Favflag) {
 
-				item.setIcon(android.R.drawable.star_on);
-				this.Favflag = true;
-				
-				// bmp = _thumbnailImages.get(imageID);
-				Random generator = new Random();
-				int n = 10000;
-				n = generator.nextInt(n);
-				bmp = fetchedImage;
+					item.setIcon(android.R.drawable.star_on);
+					this.Favflag = true;
+					bmp = _thumbnailImages.get(imageID);
+					Random generator = new Random();
+					int n = 10000;
+					n = generator.nextInt(n);
+					// bmp = fetchedImage;
 
-				try {
+					try {
 
-					FileOutputStream fo;
-					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-					bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-					File f = new File(Environment.getExternalStorageDirectory()
-							+ File.separator + "test" + imageID + ".jpg");
-					f.createNewFile();
-					Log.i(_LOGTAG, "File saved location = " + f);
-					fo = new FileOutputStream(f);
-					fo.write(bytes.toByteArray());
-					Toast.makeText(getBaseContext(),
-							"Image Saved as Favourite", Toast.LENGTH_LONG)
-							.show();
-					fo.close();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+						FileOutputStream fo;
+						ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+						bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+						/*
+						 * File f = new File(Environment.getExternalStorageDirectory() + File.separator + "test" +
+						 * imageID + ".jpg");
+						 */
+						File f = new File(myDir, "test" + imageID + n + ".jpg");
+						if (f.exists()) {
+							f.delete();
+						}
+						f.createNewFile();
+						Log.i(_LOGTAG, "File saved location = " + f);
+						fo = new FileOutputStream(f);
+						fo.write(bytes.toByteArray());
+						Toast.makeText(getBaseContext(), "Image Saved as Favourite", Toast.LENGTH_LONG).show();
+						fo.close();
+					}
+					catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
-
-			} else {
-				item.setIcon(android.R.drawable.star_off);
-				this.Favflag = false;
-			}
-			break;
+				else {
+					item.setIcon(android.R.drawable.star_off);
+					this.Favflag = false;
+				}
+				break;
 
 		/*
-		 * case R.id.visited: Toast.makeText(getBaseContext(),
-		 * "You selected Visited", Toast.LENGTH_SHORT).show(); break;
+		 * case R.id.visited: Toast.makeText(getBaseContext(), "You selected Visited", Toast.LENGTH_SHORT).show();
+		 * break;
 		 */
 
 		}
